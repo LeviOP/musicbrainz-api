@@ -168,6 +168,7 @@ export interface ISessionInformation {
 
 export class MusicBrainzApi {
 
+  /*
   private static escapeText(text) {
     let str = '';
     for (const chr of text) {
@@ -198,6 +199,7 @@ export class MusicBrainzApi {
     }
     return str;
   }
+  */
 
   public readonly config: IMusicBrainzConfig = {
     baseUrl: 'https://musicbrainz.org'
@@ -225,6 +227,7 @@ export class MusicBrainzApi {
         return value;
       }
     }
+    throw Error("Couldn't fetch value");
   }
 
   private getCookies: (currentUrl: string | URL) => Promise<tough.Cookie[]>;
@@ -584,7 +587,7 @@ export class MusicBrainzApi {
         }
       }
     }
-    this.session = await this.getSession(this.config.baseUrl);
+    this.session = await this.getSession(/* this.config.baseUrl*/);
 
     const redirectUri = '/success';
 
@@ -641,7 +644,7 @@ export class MusicBrainzApi {
 
     await this.rateLimiter.limit();
 
-    this.session = await this.getSession(this.config.baseUrl);
+    this.session = await this.getSession(/* this.config.baseUrl*/);
 
     formData.csrf_session_key = this.session.csrf.sessionKey;
     formData.csrf_token = this.session.csrf.token;
@@ -693,7 +696,7 @@ export class MusicBrainzApi {
    * @param isrc ISRC code to add
    * @param editNote Edit note
    */
-  public async addIsrc(recording: mb.IRecording, isrc: string, editNote: string = '') {
+  public async addIsrc(recording: mb.IRecording, isrc: string /* editNote: string = ''*/) {
 
     const formData = {};
 
@@ -775,7 +778,7 @@ export class MusicBrainzApi {
     return this.search<mb.IUrlList, UrlIncludes>('url', query);
   }
 
-  private async getSession(url: string): Promise<ISessionInformation> {
+  private async getSession(/* url: string*/): Promise<ISessionInformation> {
 
     const response: any = await got.get('login', {
       followRedirect: false, // Disable redirects
